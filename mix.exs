@@ -19,6 +19,9 @@ defmodule ExNdjson.MixProject do
   end
 
   defp deps do
-    []
+    [
+      {:poison, "~> 3.1"},
+      {:credo, "~> 0.10.0", only: [:dev, :test], runtime: false}
+    ]
   end
 end
