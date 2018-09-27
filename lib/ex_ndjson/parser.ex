@@ -1,6 +1,8 @@
 defmodule ExNdjson.Parser do
   @moduledoc false
-  @callback parse(String.t()) :: {:ok, term()} | {:error, String.t()}
+  @type t :: nil | true | false | list | float | integer | String.t() | map
+
+  @callback parse(String.t()) :: {:ok, t()} | {:error, :invalid, map}
 end
 
 defmodule ExNdjson.JSONParser do
