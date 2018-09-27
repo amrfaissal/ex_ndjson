@@ -1,20 +1,36 @@
+defmodule ExNdjson.SerializeError do
+  defexception message: "serialization error", exception: nil
+end
+
 defmodule ExNdjson.Serializer do
   @moduledoc """
   Serializes data structures to NDJSON format.
   """
   use Agent
-  alias ExNdjson.NdJSONParser
+  alias ExNdjson.SerializeError
+
+  @type t :: nil | true | false | list | float | integer | String.t() | map
+
+  defmacrop stacktrace do
+    if Version.compare(System.version(), "1.7.0") != :lt do
+      quote do: __STACKTRACE__
+    else
+      quote do: System.stacktrace()
+    end
+  end
 
   @spec start() :: pid()
   def start, do: start_buffer([])
 
-  @spec write(pid(), String.t()) :: pid()
-  def write(buffer, chunk) when is_binary(chunk) do
-    put_buffer(buffer, [chunk, "\n"])
+  @spec write!(pid(), t()) :: pid() | no_return()
+  def write!(buffer, chunk) do
+    put_buffer(buffer, [chunk |> Poison.encode!(), "\n"])
     buffer
+  rescue
+    e -> reraise SerializeError, [exception: e], stacktrace()
   end
 
-  @spec serialize(pid()) :: String.t() | {:error, :invalid, %{}}
+  @spec serialize(pid()) :: String.t() | no_return()
   def serialize(buffer) do
     result =
       buffer
@@ -23,11 +39,7 @@ defmodule ExNdjson.Serializer do
       |> IO.iodata_to_binary()
 
     :ok = stop_buffer(buffer)
-
-    case NdJSONParser.parse(result) do
-      {:ok, payload} -> payload
-      error -> error
-    end
+    result
   end
 
   defp start_buffer(state) do
