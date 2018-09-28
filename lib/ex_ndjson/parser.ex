@@ -2,7 +2,7 @@ defmodule ExNdjson.Parser do
   @moduledoc false
   @type t :: nil | true | false | list | float | integer | String.t() | map
 
-  @callback parse(iodata()) :: {:ok, t()} | {:error, :invalid, map}
+  @callback parse(iodata()) :: {:valid, t()} | {:invalid, [tuple]}
 end
 
 defmodule ExNdjson.JSONParser do
@@ -11,7 +11,13 @@ defmodule ExNdjson.JSONParser do
   """
   @behaviour ExNdjson.Parser
 
-  def parse(payload), do: Poison.Parser.parse(payload |> IO.iodata_to_binary())
+  def parse(payload) do
+    with {:ok, result} <- Poison.Parser.parse(payload |> IO.iodata_to_binary()) do
+      {:valid, result}
+    else
+      error -> {:invalid, error}
+    end
+  end
 end
 
 defmodule ExNdjson.NdJSONParser do
@@ -30,15 +36,18 @@ defmodule ExNdjson.NdJSONParser do
       |> String.split(["\r\n", "\n"])
       |> Enum.map(&Poison.decode/1)
 
-    case parsed_lines |> Enum.filter(fn line -> match?({:error, _, _}, line) end) do
+    case parsed_lines
+         |> Enum.filter(fn line -> match?({:error, _}, line) || match?({:error, _, _}, line) end) do
       [] ->
-        {:ok, parsed_lines |> Keyword.values()}
+        {:valid, parsed_lines |> Keyword.values()}
 
       _ ->
-        {:error, :invalid,
+        {:invalid,
          parsed_lines
          |> Helpers.to_indexed_map()
-         |> Enum.filter(fn {_, error} -> match?({:error, _, _}, error) end)}
+         |> Enum.filter(fn {_, error} ->
+           match?({:error, _}, error) || match?({:error, _, _}, error)
+         end)}
     end
   end
 end
