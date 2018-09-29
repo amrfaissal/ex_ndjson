@@ -4,7 +4,8 @@ defmodule ExNdjson.Application do
   use Application
 
   def start(_type, _args) do
-    children = []
+    children = [ExNdjson]
+
     opts = [strategy: :one_for_one, name: ExNdjson.Supervisor]
     Supervisor.start_link(children, opts)
   end
