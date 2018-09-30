@@ -1,11 +1,14 @@
 # ExNdjson
 
-**TODO: Add description**
+[![Build Status](https://travis-ci.org/amrfaissal/ex_ndjson.svg?branch=master)](https://travis-ci.org/amrfaissal/ex_ndjson)
+[![Hex.pm Version](https://img.shields.io/hexpm/v/ex_ndjson.svg?style=flat-square)](https://hex.pm/packages/ex_ndjson)
+[![Hex.pm Download Total](https://img.shields.io/hexpm/dt/ex_ndjson.svg?style=flat-square)](https://hex.pm/packages/ex_ndjson)
+
+ExNdjson is a Newline-delimited JSON library for Elixir that implements encoding and decoding to/from NDJSON as described in [NDJSON Spec](https://github.com/ndjson/ndjson-spec).
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `ex_ndjson` to your list of dependencies in `mix.exs`:
+First, Add ExNdjson to you `mix.exs` dependencies:
 
 ```elixir
 def deps do
@@ -15,6 +18,29 @@ def deps do
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/ex_ndjson](https://hexdocs.pm/ex_ndjson).
+Then, update your dependencies:
+
+```shell
+mix deps.get
+```
+
+## Usage
+
+```elixir
+ExNdjson.marshal!([%{"some" => "thing"}, %{"bar" => false, "foo" => 17, "quux" => true}])
+#=> "{\"some\":\"thing\"}\n{\"quux\":true,\"foo\":17,\"bar\":false}\n"
+
+ExNdjson.unmarshal('{"some": "thing"}\n{"quux":true, "foo":17, "bar": false}\r\n')
+#=> [%{"some" => "thing"}, %{"bar" => false, "foo" => 17, "quux" => true}]
+
+ExNdjson.unmarshal(<<123, 125, 10>>)
+#=> [%{}]
+```
+
+## Documentation
+
+Full documentation can be found at [https://hexdocs.pm/ex_ndjson](https://hexdocs.pm/ex_ndjson).
+
+## License
+
+The library is available as open source under the terms of the MIT License.
