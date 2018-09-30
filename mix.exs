@@ -7,7 +7,8 @@ defmodule ExNdjson.MixProject do
       version: "0.1.0",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      package: package()
     ]
   end
 
@@ -23,6 +24,15 @@ defmodule ExNdjson.MixProject do
       {:poison, "~> 3.1"},
       {:espec, "~> 1.6.1", only: :test},
       {:credo, "~> 0.10.0", only: [:dev, :test], runtime: false}
+    ]
+  end
+
+  defp package do
+    [
+      files: ~w(lib mix.exs README.md LICENSE VERSION),
+      maintainers: ["Faissal Elamraoui"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/amrfaissal/ex_ndjson"}
     ]
   end
 end
