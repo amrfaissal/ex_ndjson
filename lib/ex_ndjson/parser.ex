@@ -7,7 +7,7 @@ end
 
 defmodule ExNdjson.JSONParser do
   @moduledoc """
-  Implements ExNdjson.Parser behaviour for JSON binaries.
+  Implements ExNdjson.Parser behaviour for JSON IO data.
   """
   @behaviour ExNdjson.Parser
 
@@ -22,7 +22,7 @@ end
 
 defmodule ExNdjson.NdJSONParser do
   @moduledoc """
-  Implements ExNdjson.Parser behaviour for NDJSON binaries.
+  Implements ExNdjson.Parser behaviour for NDJSON IO data.
   """
   @behaviour ExNdjson.Parser
 

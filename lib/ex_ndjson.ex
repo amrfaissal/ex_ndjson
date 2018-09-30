@@ -18,9 +18,8 @@ defmodule ExNdjson do
 
   ## Examples
 
-    iex> ExNdjson.marshal!([%{id: 1}, [1, 2, 3]])
-
-    "{\"id\": \"1\"}\\\\n[1, 2, 3]\\\\n"
+      iex> ExNdjson.marshal!([%{id: 1}, [1, 2, 3]])
+      "{\"id\": \"1\"}\\n[1, 2, 3]\\n"
   """
   @spec marshal!([t()]) :: String.t() | no_return()
   def marshal!(v) when is_list(v) do
@@ -32,9 +31,8 @@ defmodule ExNdjson do
 
   ## Examples
 
-    iex> ExNdjson.unmarshal('{"id": "1"}\\\\n[1, 2, 3]\\\\r\\\\n')
-
-    [%{"id" => "1"}, [1, 2, 3]]
+      iex> ExNdjson.unmarshal('{"id": "1"}\\n[1, 2, 3]\\r\\n')
+      [%{"id" => "1"}, [1, 2, 3]]
   """
   @spec unmarshal(iodata()) :: [t()]
   def unmarshal(v) do
