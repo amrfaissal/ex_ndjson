@@ -7,8 +7,9 @@ defmodule ExNdjson.MixProject do
       version: "0.1.0",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
-      deps: deps(),
-      package: package()
+      description: description(),
+      package: package(),
+      deps: deps()
     ]
   end
 
@@ -23,8 +24,15 @@ defmodule ExNdjson.MixProject do
     [
       {:poison, "~> 3.1"},
       {:espec, "~> 1.6.1", only: :test},
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:credo, "~> 0.10.0", only: [:dev, :test], runtime: false}
     ]
+  end
+
+  defp description do
+    """
+    Implementation of Newline Delimited JSON (NDJSON) for Elixir
+    """
   end
 
   defp package do
