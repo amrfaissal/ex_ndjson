@@ -1,0 +1,16 @@
+language: elixir
+elixir:
+  - 1.7.3
+otp_release:
+  - 21.0
+sudo: false
+matrix:
+  include:
+    - install:
+      - mix local.hex --force
+      - mix local.rebar --force
+      - mix archive.install hex credo '~> 0.10' --force
+      - mix deps.get
+      script:
+      - MIX_ENV=test mix espec --trace
+      - mix credo --strict
