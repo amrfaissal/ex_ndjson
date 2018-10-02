@@ -13,4 +13,3 @@ matrix:
       - mix deps.get
       script:
       - MIX_ENV=test mix espec --trace
-      - mix credo --strict
