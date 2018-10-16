@@ -65,4 +65,19 @@ defmodule ExNdjson do
 
     {:reply, result, state}
   end
+
+  def handle_call({:unmarshal_from_file!, path}, _from, state) do
+    lines =
+      path
+      |> File.stream!()
+      |> Enum.to_list()
+
+    result =
+      case NdJSONParser.parse(lines) do
+        {:valid, decoded} -> decoded
+        error -> error
+      end
+
+    {:reply, result, state}
+  end
 end
