@@ -39,6 +39,19 @@ defmodule ExNdjson do
     GenServer.call(__MODULE__, {:unmarshal, v})
   end
 
+  @doc """
+  Parses the NDJSON-encoded lines in the given path and returns a list of decoded JSON values.
+  Raises an exception if failed to open the file.
+  ## Examples
+
+      iex> ExNdjson.unmarshal_from_file!("./fixtures/file.txt")
+      [%{"id" => "1"}, [1, 2, 3]]
+  """
+  @spec unmarshal_from_file!(Path.t()) :: [t()] | no_return()
+  def unmarshal_from_file!(path) do
+    GenServer.call(__MODULE__, {:unmarshal_from_file, path})
+  end
+
   #
   # Callbacks
   #
@@ -66,7 +79,7 @@ defmodule ExNdjson do
     {:reply, result, state}
   end
 
-  def handle_call({:unmarshal_from_file!, path}, _from, state) do
+  def handle_call({:unmarshal_from_file, path}, _from, state) do
     lines =
       path
       |> File.stream!()
