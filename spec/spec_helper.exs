@@ -1,5 +1,5 @@
 defmodule PathHelpers do
-  def fixture_path do
+  def fixtures_path do
     Path.expand("fixtures", __DIR__)
   end
 end
