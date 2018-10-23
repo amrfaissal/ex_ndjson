@@ -6,6 +6,10 @@
 
 ExNdjson is a Newline-delimited JSON library for Elixir that implements encoding and decoding to/from NDJSON as described in [NDJSON Spec](https://github.com/ndjson/ndjson-spec).
 
+## Requirements
+
+- Elixir 1.6 or later
+
 ## Installation
 
 First, Add ExNdjson to you `mix.exs` dependencies:
@@ -35,6 +39,9 @@ ExNdjson.unmarshal('{"some": "thing"}\n{"quux":true, "foo":17, "bar": false}\r\n
 
 ExNdjson.unmarshal(<<123, 125, 10>>)
 #=> [%{}]
+
+ExNdjson.unmarshal_from_file!("/path/to/ndjson/file")
+#=> [%{"id" => "1"}, [1, 2, 3]]
 ```
 
 ## Documentation
