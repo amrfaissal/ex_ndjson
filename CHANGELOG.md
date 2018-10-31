@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.1
+
+- Downgrade Poison to 3.0.0 to align with Phoenix 1.3 dependencies
+
 ## v0.2.0
 
 - Support for Elixir 1.6
