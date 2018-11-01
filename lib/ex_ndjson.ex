@@ -3,13 +3,7 @@ defmodule ExNdjson do
   Implements encoding and decoding of NDJSON as defined in [NDJSON Spec](https://github.com/ndjson/ndjson-spec).
   """
 
-  use GenServer
-  import ExNdjson.Serializer
-  alias ExNdjson.NdJSONParser
-
-  #
-  # Client API
-  #
+  @worker ExNdjson.Worker
 
   @type t :: nil | true | false | list | float | integer | String.t() | map
 
@@ -22,9 +16,7 @@ defmodule ExNdjson do
       "{\"id\": \"1\"}\\n[1, 2, 3]\\n"
   """
   @spec marshal!([t()]) :: String.t() | no_return()
-  def marshal!(v) when is_list(v) do
-    GenServer.call(__MODULE__, {:marshal!, v})
-  end
+  def marshal!(v) when is_list(v), do: GenServer.call(@worker, {:marshal!, v})
 
   @doc """
   Parses the NDJSON-encoded data and returns a list of decoded JSON values.
@@ -35,9 +27,7 @@ defmodule ExNdjson do
       [%{"id" => "1"}, [1, 2, 3]]
   """
   @spec unmarshal(iodata()) :: [t()]
-  def unmarshal(v) do
-    GenServer.call(__MODULE__, {:unmarshal, v})
-  end
+  def unmarshal(v), do: GenServer.call(@worker, {:unmarshal, v})
 
   @doc """
   Parses the NDJSON-encoded lines in the given path and returns a list of decoded JSON values.
@@ -48,49 +38,5 @@ defmodule ExNdjson do
       [%{"id" => "1"}, [1, 2, 3]]
   """
   @spec unmarshal_from_file!(Path.t()) :: [t()] | no_return()
-  def unmarshal_from_file!(path) do
-    GenServer.call(__MODULE__, {:unmarshal_from_file, path})
-  end
-
-  #
-  # Callbacks
-  #
-
-  def start_link(_args), do: GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
-  def init(:ok), do: {:ok, []}
-
-  def handle_call({:marshal!, v}, _from, state) do
-    pid = start()
-
-    v
-    |> Stream.each(fn record -> pid |> write!(record) end)
-    |> Stream.run()
-
-    {:reply, serialize(pid), state}
-  end
-
-  def handle_call({:unmarshal, v}, _from, state) do
-    result =
-      case NdJSONParser.parse(v) do
-        {:valid, decoded} -> decoded
-        error -> error
-      end
-
-    {:reply, result, state}
-  end
-
-  def handle_call({:unmarshal_from_file, path}, _from, state) do
-    lines =
-      path
-      |> File.stream!()
-      |> Enum.to_list()
-
-    result =
-      case NdJSONParser.parse(lines) do
-        {:valid, decoded} -> decoded
-        error -> error
-      end
-
-    {:reply, result, state}
-  end
+  def unmarshal_from_file!(path), do: GenServer.call(@worker, {:unmarshal_from_file, path})
 end
