@@ -37,6 +37,7 @@ defmodule ExNdjson.Serializer do
       |> Agent.get(& &1)
       |> Enum.reverse()
       |> IO.iodata_to_binary()
+      |> cleanup_string()
 
     :ok = stop_buffer(buffer)
     result
@@ -49,4 +50,11 @@ defmodule ExNdjson.Serializer do
 
   defp stop_buffer(buffer), do: Agent.stop(buffer)
   defp put_buffer(buffer, content), do: Agent.update(buffer, &[content | &1])
+
+  defp cleanup_string(string) do
+    string
+    |> String.replace(~r/\\\\/, "")
+    |> String.replace(~r/"{/, "{")
+    |> String.replace(~r/}"/, "}")
+  end
 end
