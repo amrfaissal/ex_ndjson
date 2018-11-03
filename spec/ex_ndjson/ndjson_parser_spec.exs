@@ -24,9 +24,9 @@ defmodule ExNdjson.NdJSONParserSpec do
               eql(
                 {:invalid,
                  [
-                   {1, {:error, :invalid, 1}},
-                   {2, {:error, {:invalid, "}", 0}}},
-                   {3, {:error, :invalid, 1}}
+                   {1, {:error, :invalid}},
+                   {2, {:error, {:invalid, "}"}}},
+                   {3, {:error, :invalid}}
                  ]}
               )
             )

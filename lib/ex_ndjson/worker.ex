@@ -20,6 +20,18 @@ defmodule ExNdjson.Worker do
     {:reply, serialize(pid), state}
   end
 
+  def handle_call({:marshal_into_file!, v, path}, _from, state) do
+    pid = start()
+
+    v
+    |> Stream.each(fn record -> pid |> write!(record) end)
+    |> Stream.run()
+
+    result = serialize(pid)
+
+    {:reply, path |> dump_to_file!(result), state}
+  end
+
   def handle_call({:unmarshal, v}, _from, state) do
     result =
       case NdJSONParser.parse(v) do
@@ -30,7 +42,7 @@ defmodule ExNdjson.Worker do
     {:reply, result, state}
   end
 
-  def handle_call({:unmarshal_from_file, path}, _from, state) do
+  def handle_call({:unmarshal_from_file!, path}, _from, state) do
     lines =
       path
       |> File.stream!()
@@ -43,5 +55,15 @@ defmodule ExNdjson.Worker do
       end
 
     {:reply, result, state}
+  end
+
+  #
+  # Helpers
+  #
+
+  defp dump_to_file!(path, content) do
+    file = File.open!(path, [:write])
+    IO.binwrite(file, content)
+    File.close(file)
   end
 end

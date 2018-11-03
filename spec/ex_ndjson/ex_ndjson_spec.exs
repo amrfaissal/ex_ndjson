@@ -16,6 +16,19 @@ defmodule ExNdjsonSpec do
       end
     end
 
+    describe "marshal_into_file!/2" do
+      context "Given a list of terms and file path" do
+        it "Encodes the list to NDJSON and saves it to file" do
+          file_path = "/tmp/dump.ndjson"
+
+          expect(ExNdjson.marshal_into_file!([%{id: 1}, [1, 2, 3]], file_path))
+          |> to(eql(:ok))
+
+          :ok = File.rm(file_path)
+        end
+      end
+    end
+
     describe "unmarshal/1" do
       context "Given an NDJSON binary" do
         it "Returns list of decoded JSON values" do
@@ -27,7 +40,7 @@ defmodule ExNdjsonSpec do
       context "Given an invalid NDJSON binary" do
         it "Returns :invalid tuple with list of errors" do
           expect(ExNdjson.unmarshal('{"id": "1"}\n[1, 2, 3\r\n'))
-          |> to(eq({:invalid, [{2, {:error, :invalid, 8}}]}))
+          |> to(eq({:invalid, [{2, {:error, :invalid}}]}))
         end
       end
     end

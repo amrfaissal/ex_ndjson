@@ -19,6 +19,18 @@ defmodule ExNdjson do
   def marshal!(v) when is_list(v), do: GenServer.call(@worker, {:marshal!, v})
 
   @doc """
+  Returns the NDJSON encoding of v and saves it to the specified path,
+  raises an exception on error.
+
+  ## Examples
+
+      iex> ExNdjson.marshal_into_file!([%{id: 1}, [1, 2, 3]], "dump.ndjson")
+      :ok
+  """
+  @spec marshal_into_file!([t()], Path.t()) :: :ok | no_return()
+  def marshal_into_file!(v, path), do: GenServer.call(@worker, {:marshal_into_file!, v, path})
+
+  @doc """
   Parses the NDJSON-encoded data and returns a list of decoded JSON values.
 
   ## Examples
@@ -38,5 +50,5 @@ defmodule ExNdjson do
       [%{"id" => "1"}, [1, 2, 3]]
   """
   @spec unmarshal_from_file!(Path.t()) :: [t()] | no_return()
-  def unmarshal_from_file!(path), do: GenServer.call(@worker, {:unmarshal_from_file, path})
+  def unmarshal_from_file!(path), do: GenServer.call(@worker, {:unmarshal_from_file!, path})
 end
