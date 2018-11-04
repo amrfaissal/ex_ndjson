@@ -3,7 +3,7 @@ elixir:
   - 1.6.6
   - 1.7.3
 otp_release:
-  - 21.0
+  - 21.1
 sudo: false
 matrix:
   include:
