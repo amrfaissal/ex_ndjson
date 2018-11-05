@@ -34,6 +34,9 @@ mix deps.get
 ExNdjson.marshal!([%{"some" => "thing"}, %{"bar" => false, "foo" => 17, "quux" => true}])
 #=> "{\"some\":\"thing\"}\n{\"quux\":true,\"foo\":17,\"bar\":false}\n"
 
+ExNdjson.marshal_into_file!([%{id: 1}, [1, 2, 3]], "/path/to/dump.ndjson")
+#=> :ok
+
 ExNdjson.unmarshal('{"some": "thing"}\n{"quux":true, "foo":17, "bar": false}\r\n')
 #=> [%{"some" => "thing"}, %{"bar" => false, "foo" => 17, "quux" => true}]
 
