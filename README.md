@@ -17,7 +17,7 @@ First, Add ExNdjson to you `mix.exs` dependencies:
 ```elixir
 def deps do
   [
-    {:ex_ndjson, "~> 0.2.1"}
+    {:ex_ndjson, "~> 0.3.0"}
   ]
 end
 ```
