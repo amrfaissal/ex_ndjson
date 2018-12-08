@@ -12,7 +12,7 @@ defmodule ExNdjson.JSONParser do
   @behaviour ExNdjson.Parser
 
   def parse(payload) do
-    with {:ok, result} <- Poison.Parser.parse(payload |> IO.iodata_to_binary()) do
+    with {:ok, result} <- payload |> IO.iodata_to_binary() |> Jason.decode() do
       {:valid, result}
     else
       error -> {:invalid, error}
@@ -34,7 +34,7 @@ defmodule ExNdjson.NdJSONParser do
       |> IO.iodata_to_binary()
       |> String.trim()
       |> String.split(["\r\n", "\n"])
-      |> Enum.map(&Poison.decode/1)
+      |> Enum.map(&Jason.decode/1)
 
     case parsed_lines
          |> Enum.filter(fn line -> match?({:error, _}, line) || match?({:error, _, _}, line) end) do

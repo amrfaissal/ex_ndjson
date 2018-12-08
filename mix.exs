@@ -25,7 +25,7 @@ defmodule ExNdjson.MixProject do
 
   defp deps do
     [
-      {:poison, "~> 2.0"},
+      {:jason, "~> 1.1"},
       {:espec, "~> 1.6.1", only: :test},
       {:ex_doc, "~> 0.18.0", only: :dev, runtime: false},
       {:credo, "~> 0.10.0", only: [:dev, :test], runtime: false}

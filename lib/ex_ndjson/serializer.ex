@@ -24,7 +24,7 @@ defmodule ExNdjson.Serializer do
 
   @spec write!(pid(), t()) :: pid() | no_return()
   def write!(buffer, chunk) do
-    put_buffer(buffer, [chunk |> Poison.encode!(), "\n"])
+    put_buffer(buffer, [chunk |> Jason.encode!(), "\n"])
     buffer
   rescue
     e -> reraise SerializeError, [exception: e], stacktrace()

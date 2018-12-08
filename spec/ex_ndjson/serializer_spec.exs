@@ -13,23 +13,12 @@ defmodule ExNdjson.SerializerSpec do
             start()
             |> write!([%{name: "elixir", version: "1.7"}, [2, 4, 6]])
 
-          expect(
-            buffer
-            |> is_pid()
-            |> to(be_true())
-          )
+          expect(is_pid(buffer)) |> to(be_true())
 
-          expect(
-            buffer
-            |> Agent.get(fn state -> state end)
-            |> to(eql([["[{\"version\":\"1.7\",\"name\":\"elixir\"},[2,4,6]]", "\n"]]))
-          )
+          expect(Agent.get(buffer, fn state -> state end))
+          |> to(eql([["[{\"name\":\"elixir\",\"version\":\"1.7\"},[2,4,6]]", "\n"]]))
 
-          expect(
-            buffer
-            |> Agent.stop()
-            |> to(eql(:ok))
-          )
+          expect(Agent.stop(buffer)) |> to(eql(:ok))
         end
       end
 
@@ -37,17 +26,10 @@ defmodule ExNdjson.SerializerSpec do
         it "Raises an exception" do
           buffer = start()
 
-          expect(fn ->
-            buffer
-            |> write!({2, 4, 6})
-          end)
+          expect(fn -> write!(buffer, {2, 4, 6}) end)
           |> to(raise_exception(ExNdjson.SerializeError))
 
-          expect(
-            buffer
-            |> Agent.stop()
-            |> to(eql(:ok))
-          )
+          expect(Agent.stop(buffer)) |> to(eql(:ok))
         end
       end
     end
@@ -60,10 +42,8 @@ defmodule ExNdjson.SerializerSpec do
             |> write!([%{name: "elixir", version: "1.7"}, [2, 4, 6]])
             |> serialize()
 
-          expect(
-            output
-            |> to(eql("[{\"version\":\"1.7\",\"name\":\"elixir\"},[2,4,6]]\n"))
-          )
+          expect(output)
+          |> to(eql("[{\"name\":\"elixir\",\"version\":\"1.7\"},[2,4,6]]\n"))
         end
       end
     end

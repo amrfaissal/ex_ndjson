@@ -39,8 +39,12 @@ defmodule ExNdjsonSpec do
 
       context "Given an invalid NDJSON binary" do
         it "Returns :invalid tuple with list of errors" do
+          expected =
+            {:invalid,
+             [{2, {:error, %Jason.DecodeError{data: "[1, 2, 3", position: 8, token: nil}}}]}
+
           expect(ExNdjson.unmarshal('{"id": "1"}\n[1, 2, 3\r\n'))
-          |> to(eq({:invalid, [{2, {:error, :invalid}}]}))
+          |> to(eq(expected))
         end
       end
     end
