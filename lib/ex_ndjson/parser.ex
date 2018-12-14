@@ -11,8 +11,10 @@ defmodule ExNdjson.JSONParser do
   """
   @behaviour ExNdjson.Parser
 
+  import ExNdjson.Helpers
+
   def parse(payload) do
-    with {:ok, result} <- payload |> IO.iodata_to_binary() |> Jason.decode() do
+    with {:ok, result} <- payload |> IO.iodata_to_binary() |> json_library().decode() do
       {:valid, result}
     else
       error -> {:invalid, error}
@@ -26,7 +28,7 @@ defmodule ExNdjson.NdJSONParser do
   """
   @behaviour ExNdjson.Parser
 
-  alias ExNdjson.Helpers
+  import ExNdjson.Helpers
 
   def parse(payload) do
     parsed_lines =
@@ -34,7 +36,7 @@ defmodule ExNdjson.NdJSONParser do
       |> IO.iodata_to_binary()
       |> String.trim()
       |> String.split(["\r\n", "\n"])
-      |> Enum.map(&Jason.decode/1)
+      |> Enum.map(&json_library().decode/1)
 
     case parsed_lines
          |> Enum.filter(fn line -> match?({:error, _}, line) || match?({:error, _, _}, line) end) do
@@ -44,7 +46,7 @@ defmodule ExNdjson.NdJSONParser do
       _ ->
         {:invalid,
          parsed_lines
-         |> Helpers.to_indexed_map()
+         |> to_indexed_map()
          |> Enum.filter(fn {_, error} ->
            match?({:error, _}, error) || match?({:error, _, _}, error)
          end)}

@@ -8,6 +8,7 @@ defmodule ExNdjson.Serializer do
   """
   use Agent
   alias ExNdjson.SerializeError
+  import ExNdjson.Helpers
 
   @type t :: nil | true | false | list | float | integer | String.t() | map
 
@@ -24,7 +25,7 @@ defmodule ExNdjson.Serializer do
 
   @spec write!(pid(), t()) :: pid() | no_return()
   def write!(buffer, chunk) do
-    put_buffer(buffer, [chunk |> Jason.encode!(), "\n"])
+    put_buffer(buffer, [chunk |> json_library().encode!(), "\n"])
     buffer
   rescue
     e -> reraise SerializeError, [exception: e], stacktrace()
