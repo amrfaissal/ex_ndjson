@@ -47,6 +47,14 @@ ExNdjson.unmarshal_from_file!("/path/to/ndjson/file")
 #=> [%{"id" => "1"}, [1, 2, 3]]
 ```
 
+## Configuration
+
+You can customize the library used for JSON encoding/decoding:
+
+```elixir
+config :ex_ndjson, json_library: Poison # Defaults to Jason
+```
+
 ## Documentation
 
 Full documentation can be found at [https://hexdocs.pm/ex_ndjson](https://hexdocs.pm/ex_ndjson).
