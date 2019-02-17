@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.1
+
+- Use `Jason` as default JSON encoder/decoder
+- Ability to change the JSON library through the configuration
+
 ## 0.3.0
 
 - Ability to marshal into a file using `ExNdjson.marshal_into_file!/2`
