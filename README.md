@@ -4,7 +4,7 @@
 [![Hex.pm Version](https://img.shields.io/hexpm/v/ex_ndjson.svg?style=flat-square)](https://hex.pm/packages/ex_ndjson)
 [![Hex.pm Download Total](https://img.shields.io/hexpm/dt/ex_ndjson.svg?style=flat-square)](https://hex.pm/packages/ex_ndjson)
 
-ExNdjson is a Newline-delimited JSON library for Elixir that implements encoding and decoding to/from NDJSON as described in [NDJSON Spec](https://github.com/ndjson/ndjson-spec).
+ExNdjson is a Newline-delimited JSON library for Elixir that implements encoding and decoding to/from NDJSON as described in the [NDJSON Spec](https://github.com/ndjson/ndjson-spec).
 
 ## Requirements
 
@@ -17,7 +17,7 @@ First, Add ExNdjson to you `mix.exs` dependencies:
 ```elixir
 def deps do
   [
-    {:ex_ndjson, "~> 0.3.0"}
+    {:ex_ndjson, "~> 0.3.1"}
   ]
 end
 ```
