@@ -5,7 +5,7 @@ defmodule ExNdjson.MixProject do
     [
       app: :ex_ndjson,
       version: "0.3.1",
-      elixir: "~> 1.6",
+      elixir: "~> 1.0",
       start_permanent: Mix.env() == :prod,
       preferred_cli_env: [
         espec: :test

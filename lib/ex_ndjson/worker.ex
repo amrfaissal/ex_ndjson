@@ -7,7 +7,7 @@ defmodule ExNdjson.Worker do
   import ExNdjson.Serializer
   alias ExNdjson.NdJSONParser
 
-  def start_link(_args), do: GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
+  def start_link, do: GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   def init(:ok), do: {:ok, []}
 
   def handle_call({:marshal!, v}, _from, state) do
