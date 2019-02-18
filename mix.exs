@@ -4,7 +4,7 @@ defmodule ExNdjson.MixProject do
   def project do
     [
       app: :ex_ndjson,
-      version: "0.3.1",
+      version: "0.3.2",
       elixir: "~> 1.0",
       start_permanent: Mix.env() == :prod,
       preferred_cli_env: [
@@ -27,7 +27,7 @@ defmodule ExNdjson.MixProject do
     [
       {:jason, "~> 1.1"},
       {:espec, "~> 1.6.1", only: :test},
-      {:ex_doc, "~> 0.18.0", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:credo, "~> 0.10.0", only: [:dev, :test], runtime: false}
     ]
   end
